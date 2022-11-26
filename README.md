@@ -1,71 +1,105 @@
-# Experiment-02-Introduction-to-Roboanalyzer-
+# Inverse-kinematic-modeling-using-robo-analyzer-
+
+ 
 ## AIM: 
-To Design & simulate an environment for pick & place operations with Industrial Robot using Robo DK software
+To analyze the inverse kinematics using DH parameters for a 3 dof planer and 3 dof articulated robot using roboanalyzer and polt the graph of joint angle for a given  input end effector position .
+
+
 ### COMPONENTS REQUIRED:
-1.	RoboDK
+1.Robo analyzer software  
+
 
 ### THEORY: 
+  
+### Inverse Kinematics
+ 
 
- Types of pick and place robots
-There are several pick and place robot types and components, including:
+Inverse kinematics is the use of kinematic equations to determine the motion of a robot to reach a desired position. For example, to perform automated bin picking, a robotic arm used in a manufacturing line needs precise motion from an initial position to a desired position between bins and manufacturing machines. The grasping end of a robot arm is designated as the end-effector. The robot configuration is a list of joint positions that are within the position limits of the robot model and do not violate any constraints the robot has.
 
-Robotic arm – Robotic arms are the most common type of pick and place robots. A 5-axis robotic arm robot can be used for standard pick and place applications where objects are picked up and moved to other locations in a single plane. A 6-axis robotic arm robot is used for more complex applications, such as when objects must be twisted or re-oriented before being placed in another location.
-Cartesian – Like a 6-axis robotic arm, Cartesian robots work in multiple planes. These robots move in three orthogonal axes (X, Y and Z) using Cartesian coordinates. They can be constructed with any type of linear actuator and several types of drive mechanisms such as belt, ball or lead screw mechanisms. They typically have better positioning accuracy compared to 6-axis robotic arms.
-Delta – Often used in applications where robots pick items in groups and place them in assembly patterns or containers, Delta robots have advanced vision technologies that enable them to distinguish various sizes, shapes and colors. There are several configurations of Delta robots, but most have three arms that operate on four axes. They have heavy motors affixed to a frame, with lightweight arms connected to linking rods with joints at either end of each arm (typically ball joints) to allow movement.
-Fast pick – Fast pick robots are ideal for use in medium- and high-volume applications with high-velocity SKUs. Fast pick robots fully automate the picking process, freeing up the human workforce to focus on higher-impact activities. They’re ideal for fast-moving “top-off” items, such as promotional items added to orders or batteries. These robots can pick up to 300 SKUs per hour from a pool of up to 8 SKUs.
-Collaborative – Collaborative robots augment the work of humans by leading associates to pick locations and guiding associates through each task. By optimizing routes in real-time and keeping associates on task, collaborative robots help associates work more efficiently.
+ Most industrial robots are constructed of several independently controllable articulated joints. Each joint is connected to one or more of the other joints, sometimes in complex configurations. The end effector is attached at the end of the entire “kinematic chain”. When you move any one joint, this will affect the end effector’s pose in various ways.
 
-Applications for pick and place robots
-Pick and place robots are often used in manufacturing but are also used in applications such as packaging, bin picking and inspection. Here’s a look at a few of the most common applications for pick and place robots and how they’re used.
+This means that there is no simple, direct relationship between the end effector position and any one particular joint.
 
-Assembly – Pick and place robots used in assembly applications grab incoming parts from one location, such as a conveyor, and place or affix the part on another piece of the item. The two joined parts are then transported to the next assembly area.
-Packaging – Pick and place robots used in the packaging process grab items from an incoming source or designated area and place the items in a packaging container.
-Bin picking – Pick and place robots used in bin picking applications grab parts or items from bins. These pick and place robots typically have advanced vision systems allowing them to distinguish color, shape and size to pick the right items even from bins containing randomly mixed items. These parts or items are then sent to another location for assembly or packaging.
-Inspection – Pick and place robots used for inspection applications are equipped with advanced vision systems to pick up objects, detect anomalies and remove defective parts or items by placing them in a designated location.
+For example, if you want the robot’s end effector to move 1 mm linearly along the Z-axis, you may need to move all of the joints by a different amount.
 
+Finally, inverse kinematics algorithms calculate the exact position of each of the robot’s joints required to reach your desired end effector pose.
+
+### solving inverse kinematic model 
+![image](https://user-images.githubusercontent.com/36288975/170622829-3fe97ef7-8ef1-44af-afae-b0954871aa0c.png)
+
+
+![image](https://user-images.githubusercontent.com/36288975/170622902-f48fd9c7-f2ec-4fd5-904b-ea51be8298c3.png)
+
+![image](https://user-images.githubusercontent.com/36288975/170622934-a3fd7f77-7eb2-4408-b66d-d6e3adbd1f99.png)
+
+![image](https://user-images.githubusercontent.com/36288975/170622982-9c4d8b23-1563-4e17-9616-87bcc4f4501d.png)
+![image](https://user-images.githubusercontent.com/36288975/170623020-f27efc12-bb58-4f62-840d-af544ac6689e.png)
 
 ### PROCEDURE:
-	 
-	 
-	 
-	 
+```
+# RoboDK Python Intermediate file to generate robot programs.
+# Program name: MainProgram
+# This file requires the post processor: 
+#   Doosan
+# to generate your robot program.
+# This is a temporary file and you can delete it once you have generated your program.
+# 
+# Post processor documentation: https://robodk.com/doc/en/PythonAPI/postprocessor.html
+
+import sys
+import os
+sys.path.append(os.path.abspath(r"""C:/RoboDK/Posts/""")) # temporarily add path to POSTS folder
+
+from Doosan import *
+
+try:
+ from robodk.robomath import PosePP as p
+except:
+ # This will be removed in future versions of RoboDK
+ from robodk import PosePP as p
 
 
-### PROGRAM 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+print('Total instructions: 18')
+r = RobotPost(r"""Doosan""",r"""Doosan M1013""",6, axes_type=['R','R','R','R','R','R'], ip_com=r"""127.0.0.1""", api_port=20500, prog_ptr=2573048672048, robot_ptr=2572914133088)
+
+r.ProgStart(r"""MainProgram""")
+r.RunMessage(r"""Program generated by RoboDK v5.5.1 for Doosan M1013 on 06/11/2022 17:15:22""",True)
+r.RunMessage(r"""Using nominal kinematics.""",True)
+r.RunCode(r"""ReplaceObjects""", True)
+r.RunCode(r"""pickpart1""", True)
+r.RunCode(r"""placepart2""", True)
+r.RunCode(r"""pickpart2""", True)
+r.RunCode(r"""placepart1""", True)
+r.ProgFinish(r"""MainProgram""")
+r.ProgStart(r"""ReplaceObjects""")
+r.setFrame(p(500,-200,0,0,0,0),-1,r"""part1""")
+r.setTool(p(0,0,130,0,0,0),-1,r"""RobotiQ 2F-85 Gripper (Open)""")
+r.MoveJ(p(0,0,200,90,-0.092,179.745),[-18.2056,7.03902,117.487,0.203301,55.2607,71.679],[0,0,0])
+r.RunMessage(r"""Replace objects""",True)
+r.ProgFinish(r"""ReplaceObjects""")
+r.ProgStart(r"""pickpart1""")
+r.MoveJ(p(0,0,200,90,-0.092,179.745),[-18.2056,7.03902,117.487,0.203301,55.2607,71.679],[0,0,0])
+r.MoveL(p(0,0,85,90,-0.092,179.745),[-18.2056,15.1447,122.787,0.250375,41.8554,71.6084],[0,0,0])
+r.RunMessage(r"""Attach to RobotiQ 2F-85 Gripper (Open)""",True)
+r.MoveL(p(0,0,200,90,-0.092,179.745),[-18.2056,7.03902,117.487,0.203301,55.2607,71.679],[0,0,0])
+r.ProgFinish(r"""pickpart1""")
+r.ProgStart(r"""placepart2""")
+r.setFrame(p(500,200,0,0,0,0),-1,r"""part2""")
+r.MoveJ(p(0,0,200,90,-0.092,179.745),[25.4877,7.01322,117.517,-0.0324971,55.2,115.506],[0,0,0])
+r.MoveL(p(0,0,85,90,-0.092,179.745),[25.4877,15.1226,122.818,-0.0400439,41.7893,115.518],[0,0,0])
 
 
 
+```
 
 
 
+### SIMULATION :
+![output](1.png)
 
+![output](2.png)
 
-
-
-
-
-
-
-
+ 
+ 
 ### RESULTS :  
+Thus, an environment for pick & place operations with Industrial Robot using Robo DK software is designed and simulated.
